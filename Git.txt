@@ -28,7 +28,7 @@
 
 - Bajar el repositorio:
 
-    git pull Zenith
+    git pull Zenith <branch>
 
 - Subir el repositorio:
 
