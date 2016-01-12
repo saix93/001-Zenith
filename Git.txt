@@ -22,6 +22,10 @@
 
     git commit  (para comprobar qué falta por añadir y hacer el commit)
 
+- Eliminar algo del status
+
+    git rm <fichero/carpeta>
+
 - Especificar dirección remota:
 
     git remote add Zenith https://github.com/saix93/001-Zenith.git
