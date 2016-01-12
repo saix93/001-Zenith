@@ -1,0 +1,35 @@
+- Crear una key con git:
+
+    ssh-keygen -t rsa -b 4096 -C "r.torresgonzalez.93@gmail.com"
+
+- Añadir la key al ssh-agent
+
+    eval $(ssh-agent)
+
+    ssh-add ~/.ssh/id_rsa
+
+- Comprobar la conexión
+
+    ssh -T git@github.com
+
+----------------------------------------------------------------------------------------------------------------------------
+
+- Crear un nuevo repositorio:
+
+    git init
+
+    git add *.*
+
+    git commit  (para comprobar qué falta por añadir y hacer el commit)
+
+- Especificar dirección remota:
+
+    git remote add Zenith https://github.com/saix93/001-Zenith.git
+
+- Bajar el repositorio:
+
+    git pull Zenith
+
+- Subir el repositorio:
+
+    git push Zenith <branch>
