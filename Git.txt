@@ -8,6 +8,12 @@
 
     ssh-add ~/.ssh/id_rsa
 
+- Copiar la key al portapapeles para añadirla en github:
+
+    cd ~/.ssh
+
+    cat id_rsa.pub | clip
+
 - Comprobar la conexión
 
     ssh -T git@github.com
