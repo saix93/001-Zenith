@@ -50,13 +50,12 @@
                 id: req.body.id,
                 text: req.body.text
             };
+            res.json(Lista);
         } else {
             res.send({
                 "Error": "El elemento ya existe"
             });
         }
-
-        res.json(Lista);
     });
 
     // TODO: Borrar un elemento y ordenar el array cada vez que se borra o se añade un elemento
