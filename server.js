@@ -24,9 +24,6 @@
         },{
             "id": 2,
             "text": "Segundo elemento"
-        },{
-            "id": 3,
-            "text": "Tercer elemento"
         }]
     };
 
@@ -35,9 +32,7 @@
     // api ---------------------------------------------------------------------
     // get de la lista de elementos
     httpApp.get('/api/lista', function(req, res) {
-
         res.json(Lista);
-
     });
 
     // crea un elemento nuevo en la lista
@@ -62,7 +57,6 @@
         }
 
         res.json(Lista);
-
     });
 
     // TODO: Borrar un elemento y ordenar el array cada vez que se borra o se añade un elemento

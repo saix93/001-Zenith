@@ -1,5 +1,7 @@
-<p>This is the partial for view 2.</p>
-<p>
-  Showing of 'interpolate' filter:
-  {{ 'Current version is v%VERSION%.' | interpolate }}
-</p>
+<section id="salas" class="wrapper style2 spotlights">
+    <section ng-repeat="(key, value) in elementos">
+        <p>Key: {{ key }}</p>
+        <p>ID: {{ value.id }}</p>
+        <p>Texto: {{ value.text }}</p>
+    </section>
+</section>

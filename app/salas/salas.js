@@ -9,7 +9,7 @@ angular.module('myApp.salas', ['ngRoute'])
     });
 }])
 
-.controller('SalasCtrl', ['$scope', '$location', 'CommonFunctions', 'Data', function($scope, $location, CommonFunctions, Data) {
+.controller('SalasCtrl', ['$scope', '$location', '$http', 'CommonFunctions', 'Data', function($scope, $location, $http, CommonFunctions, Data) {
     $scope.$watch(function () { return window.location.href; }, function(newV, oldV) {
         if(newV != oldV){
             console.log("CAMBIO: " + newV);
@@ -22,4 +22,12 @@ angular.module('myApp.salas', ['ngRoute'])
     if (Data.getUrl() == '' || typeof(Data.getUrl()) == 'undefined') {
         Data.setUrl(window.location.href);
     }
+
+    $http.get('/api/lista')
+        .success(function(data){
+            $scope.elementos = data.elementos;
+        })
+        .error(function(data){
+
+        });
 }]);
