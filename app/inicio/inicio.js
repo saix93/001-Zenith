@@ -30,4 +30,12 @@ angular.module('myApp.inicio', ['ngRoute'])
         .error(function(data){
 
         });
+
+    $scope.login = function() {
+        if ($scope.username != "Arich") {
+            $location.url('salas');
+        } else {
+            $scope.nameError = true;
+        }
+    }
 }]);

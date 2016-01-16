@@ -30,4 +30,17 @@ angular.module('myApp.salas', ['ngRoute'])
         .error(function(data){
 
         });
+
+    $scope.addRoom = function () {
+        var data = {};
+        data.id = $scope.newId;
+        data.text = $scope.newText;
+        $http.post('/api/lista', data);
+    };
+
+    /* Controlar el cambio en el número de salas para mostrar la lista actualizada
+    $scope.$watch($scope.elementos, function(newValue, oldValue) {
+        $scope.$apply();
+    });
+    */
 }]);
