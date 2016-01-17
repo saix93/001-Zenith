@@ -1,5 +1,9 @@
+@import '../libs/vars';
+@import '../libs/functions';
+@import '../libs/mixins';
+
 ///
-/// Hyperspace by HTML5 UP
+/// Eventually by HTML5 UP
 /// html5up.net | @n33co
 /// Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 ///
@@ -7,86 +11,31 @@
 /* Header */
 
 	#header {
-		@include vendor('display', 'flex');
-		background-color: _palette(accent1);
-		cursor: default;
-		padding: 1.75em 2em;
-
-		> .title {
-			border: 0;
-			color: _palette(fg-bold);
-			display: block;
-			font-size: 1.25em;
-			font-weight: _font(weight-bold);
+		h1 {
+			font-size: 3.25em;
+			margin: 0 0 (_size(element-margin) * 0.275) 0;
 		}
 
-		> nav {
-			@include vendor('flex', '1');
-			text-align: right;
+		p {
+			font-size: 1.35em;
+			line-height: 1.65em;
+		}
 
-			> ul {
-				margin: 0;
-				padding: 0;
-
-				> li {
-					display: inline-block;
-					margin-left: 1.75em;
-					padding: 0;
-					vertical-align: middle;
-
-					&:first-child {
-						margin-left: 0;
-					}
-
-					a {
-						border: 0;
-						color: _palette(fg-light);
-						display: inline-block;
-						font-size: 0.6em;
-						font-weight: _font(weight-bold);
-						letter-spacing: _font(kerning-alt);
-						text-transform: uppercase;
-
-						&:hover {
-							color: _palette(fg);
-						}
-
-						&.active {
-							color: _palette(fg-bold);
-						}
-					}
-				}
-			}
+		a {
+			color: inherit;
 		}
 
 		@include breakpoint(small) {
-			padding: 1em 2em;
+			h1 {
+				font-size: 2em;
+			}
+
+			p {
+				font-size: 1em;
+			}
 		}
 
 		@include breakpoint(xsmall) {
-			display: block;
-			padding: 0 2em;
-			text-align: left;
-
-			.title {
-				font-size: 1.25em;
-				padding: 1em 0;
-			}
-
-			> nav {
-				border-top: solid 1px _palette(border);
-				text-align: inherit;
-
-				> ul {
-					> li {
-						margin-left: 1.5em;
-
-						a {
-							height: 6em;
-							line-height: 6em;
-						}
-					}
-				}
-			}
+			margin: 0 0 (_size(element-margin) * 0.5) 0;
 		}
 	}

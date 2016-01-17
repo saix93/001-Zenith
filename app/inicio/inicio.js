@@ -10,32 +10,23 @@ angular.module('myApp.inicio', ['ngRoute'])
 }])
 
 .controller('InicioCtrl', ['$scope', '$location', '$http', 'CommonFunctions', 'Data', function($scope, $location, $http, CommonFunctions, Data) {
-    $scope.$watch(function () { return window.location.href; }, function(newV, oldV) {
-        if(newV != oldV){
-            console.log("CAMBIO: " + newV);
-        } else {
-            console.log("IGUAL - NUEVO: " + newV);
-            console.log("IGUAL - viejo: " + oldV);
-        }
-    });
+    // Inicializacion del controlador
 
-    if (Data.getUrl() == '' || typeof(Data.getUrl()) == 'undefined') {
-        Data.setUrl(window.location.href);
-    }
+        $http.get('/api/lista')
+            .success(function(data){
+                $scope.elementos = data.elementos;
+            })
+            .error(function(data){
 
-    $http.get('/api/lista')
-        .success(function(data){
-            $scope.elementos = data.elementos;
-        })
-        .error(function(data){
+            });
 
-        });
+    // Funciones llamadas desde plantilla
 
-    $scope.login = function() {
-        if ($scope.username != "Arich") {
-            $location.url('salas');
-        } else {
-            $scope.nameError = true;
-        }
-    }
+        $scope.login = function() {
+            if ($scope.username != "Arich") {
+                $location.url('salas');
+            } else {
+                $scope.errorModel.nameError = true;
+            }
+        };
 }]);

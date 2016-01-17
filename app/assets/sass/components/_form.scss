@@ -1,5 +1,9 @@
+@import '../libs/vars';
+@import '../libs/functions';
+@import '../libs/mixins';
+
 ///
-/// Hyperspace by HTML5 UP
+/// Eventually by HTML5 UP
 /// html5up.net | @n33co
 /// Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 ///
@@ -9,34 +13,39 @@
 	form {
 		margin: 0 0 _size(element-margin) 0;
 
-		.field {
-			margin: 0 0 (_size(element-margin) * 0.5) 0;
+		.message {
+			@include icon;
+			@include vendor('transition', (
+				'opacity #{_duration(transition)} ease-in-out',
+				'transform #{_duration(transition)} ease-in-out'
+			));
+			@include vendor('transform', 'scale(1.05)');
+			height: _size(element-height);
+			line-height: _size(element-height);
+			opacity: 0;
 
-			&.half {
-				width: 50%;
-				float: left;
-				padding: 0 0 0 0.75em;
+			&:before {
+				margin-right: 0.5em;
+			}
 
-				&.first {
-					padding: 0 0.75em 0 0;
+			&.visible {
+				@include vendor('transform', 'scale(1)');
+				opacity: 1;
+			}
+
+			&.success {
+				color: _palette(positive, bg);
+
+				&:before {
+					content: '\f00c';
 				}
 			}
-		}
 
-		> .actions {
-			margin: _size(element-margin) 0 0 0 !important;
-		}
+			&.failure {
+				color: _palette(negative, bg);
 
-		@include breakpoint(small) {
-			.field {
-				&.half {
-					width: 100%;
-					float: none;
-					padding: 0;
-
-					&.first {
-						padding: 0;
-					}
+				&:before {
+					content: '\f119';
 				}
 			}
 		}
@@ -44,21 +53,30 @@
 
 	label {
 		color: _palette(fg-bold);
-		font-weight: _font(weight-bold);
-		line-height: 1.5;
-		margin: 0 0 (_size(element-margin) * 0.35) 0;
 		display: block;
-		font-size: 1.1em;
+		font-size: 0.9em;
+		font-weight: _font(weight-bold);
+		margin: 0 0 (_size(element-margin) * 0.5) 0;
+	}
+
+	@include keyframes(focus) {
+		0% { @include vendor('transform', 'scale(1)'); }
+		50% { @include vendor('transform', 'scale(1.025)'); }
+		100% { @include vendor('transform', 'scale(1)'); }
 	}
 
 	input[type="text"],
 	input[type="password"],
 	input[type="email"],
-	input[type="tel"],
 	select,
 	textarea {
 		@include vendor('appearance', 'none');
-		background: _palette(border-bg);
+		@include vendor('transform', 'scale(1)');
+		@include vendor('transition', (
+			'border-color #{_duration(transition)} ease',
+			'background-color #{_duration(transition)} ease'
+		));
+		background-color: transparent;
 		border-radius: _size(border-radius);
 		border: none;
 		border: solid _size(border-width) _palette(border);
@@ -74,8 +92,9 @@
 		}
 
 		&:focus {
-			border-color: _palette(fg-bold);
-			box-shadow: 0 0 0 _size(border-width) _palette(fg-bold);
+			@include vendor('animation', 'focus 0.1s');
+			background-color: _palette(border-bg);
+			border-color: _palette(accent, bg);
 		}
 	}
 
@@ -103,13 +122,6 @@
 		}
 	}
 
-	select {
-		option {
-			background-color: _palette(bg);
-			color: _palette(fg-bold);
-		}
-	}
-
 	input[type="text"],
 	input[type="password"],
 	input[type="email"],
@@ -119,10 +131,6 @@
 
 	textarea {
 		padding: 0.75em 1em;
-
-		body.is-ie & {
-			min-height: 10em;
-		}
 	}
 
 	input[type="checkbox"],
@@ -164,17 +172,17 @@
 
 		&:checked + label {
 			&:before {
-				background: _palette(fg-bold);
-				border-color: _palette(fg-bold);
-				color: _palette(accent3);
+				background: _palette(accent, bg);
+				border-color: _palette(accent, bg);
+				color: _palette(accent, fg-bold);
 				content: '\f00c';
 			}
 		}
 
 		&:focus + label {
 			&:before {
-				border-color: _palette(fg-bold);
-				box-shadow: 0 0 0 _size(border-width) _palette(fg-bold);
+				border-color: _palette(accent, bg);
+				box-shadow: 0 0 0 _size(border-width) _palette(accent, bg);
 			}
 		}
 	}

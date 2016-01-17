@@ -1,19 +1,22 @@
 <section id="salas" class="wrapper style2 spotlights">
     <table>
         <tr>
-            <th>ID</th>
-            <th>TEXTO</th>
+            <th>CREADOR</th>
+            <th>NOMBRE DE LA SALA</th>
+            <th>CONTRASEÑA</th>
+            <th></th>
         </tr>
         <tr ng-repeat="(key, value) in elementos">
             <td>{{ value.id }}</td>
             <td>{{ value.text }}</td>
         </tr>
         <tr>
-            <td><input placeholder="ID" ng-model="newId"/></td>
-            <td><input placeholder="TEXTO" ng-model="newText"/></td>
+            <td><input id="id" placeholder="ID" ng-model="newId"/></td>
+            <td><input id="texto" placeholder="TEXTO" ng-model="newText"/></td>
         </tr>
         <tr>
-            <td colspan="2"><button ng-click="addRoom()">Añadir</button></td>
+            <td colspan="2"><button ng-click="addRoom(newId, newText)">Añadir</button></td>
         </tr>
     </table>
+    <a href="" ng-click="focusElement(errorModel.roomError.errorInput)" ng-if="errorModel.roomError">{{ errorModel.roomError.errorText }}</a>
 </section>

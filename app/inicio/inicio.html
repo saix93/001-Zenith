@@ -1,9 +1,13 @@
-<section id="inicio" class="wrapper style1 fullscreen fade-up">
-    <div class="inner">
-        <p>{{ elementos[0].id }}</p>
-    </div>
-    <p ng-if="nameError">El nombre está mal puesto</p>
-    <button ng-click="login()">Login</button>
-    <input type="text" ng-model="username"></input>
-    <p>{{ username }}</p>
-</section>
+<!-- Header -->
+    <header id="header">
+        <h1>Zenith</h1>
+        <p>Una aplicación web para comunicarte con quien quieras.<br/>
+        Cuando quieras.<br/>
+        Como quieras.</p>
+    </header>
+
+<!-- Signup Form -->
+    <form id="signup-form" method="post" action="#">
+        <input type="text" name="text" id="text" placeholder="Nombre de usuario" />
+        <button>Continuar</button>
+    </form>

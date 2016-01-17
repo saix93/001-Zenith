@@ -10,37 +10,31 @@ angular.module('myApp.salas', ['ngRoute'])
 }])
 
 .controller('SalasCtrl', ['$scope', '$location', '$http', 'CommonFunctions', 'Data', function($scope, $location, $http, CommonFunctions, Data) {
-    $scope.$watch(function () { return window.location.href; }, function(newV, oldV) {
-        if(newV != oldV){
-            console.log("CAMBIO: " + newV);
-        } else {
-            console.log("IGUAL - NUEVO: " + newV);
-            console.log("IGUAL - viejo: " + oldV);
-        }
-    });
+    // Inicializacion del controlador
 
-    if (Data.getUrl() == '' || typeof(Data.getUrl()) == 'undefined') {
-        Data.setUrl(window.location.href);
-    }
+        $scope.errorModel = {};
 
-    $http.get('/api/lista')
-        .success(function(data){
-            $scope.elementos = data.elementos;
-        })
-        .error(function(data){
+        $http.get('/api/lista')
+            .success(function(data){
+                $scope.elementos = data.elementos;
+            });
 
-        });
+    // Funciones llamadas desde plantilla
 
-    $scope.addRoom = function () {
-        var data = {};
-        data.id = $scope.newId;
-        data.text = $scope.newText;
-        $http.post('/api/lista', data);
-    };
+        $scope.addRoom = function (newId, newText) {
+            var newData = {};
+            newData.id = newId;
+            newData.text = newText;
+            $scope.errorModel = {};
 
-    /* Controlar el cambio en el número de salas para mostrar la lista actualizada
-    $scope.$watch($scope.elementos, function(newValue, oldValue) {
-        $scope.$apply();
-    });
-    */
+            $http.post('/api/lista', newData).success(function(data){
+                $scope.elementos = data.elementos;
+            }).error(function(data){
+                $scope.errorModel.roomError = data;
+            });
+        };
+
+        $scope.focusElement = function (input) {
+            document.getElementById(input).focus();
+        };
 }]);

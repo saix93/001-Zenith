@@ -20,12 +20,59 @@
     var Lista = {
         "elementos": [{
             "id": 1,
-            "text": "Texto de prueba"
+            "owner": "Basch",
+            "text": "Sala de Basch"
         },{
             "id": 2,
-            "text": "Segundo elemento"
+            "owner": "Link",
+            "text": "Sala de Link"
+        },{
+            "id": 3,
+            "owner": "Saix",
+            "text": "DSPRoom"
         }]
     };
+
+    //Lista de errores con código y texto
+    function errorList(err) {
+        var data = {};
+        data.errorCode = err;
+        data.errorText;
+        data.errorVar;
+
+        switch (err){
+            case 1000:
+                data.errorText = "La ID ya existe";
+                data.errorInput = "id";
+                break;
+            case 1001:
+                data.errorText = "La ID no puede ir vacía";
+                data.errorInput = "id";
+                break;
+            case 1002:
+                data.errorText = "La ID debe ser un número";
+                data.errorInput = "id";
+                break;
+            case 1003:
+                data.errorText = "El texto no puede ir vacío";
+                data.errorInput = "texto";
+                break;
+            case 1004:
+                data.errorText = "";
+                break;
+            case 1005:
+                data.errorText = "";
+                break;
+            case 1006:
+                data.errorText = "";
+                break;
+
+            default: 
+                data.errorText = "Error desconocido";
+        };
+
+        return data;
+    }
 
 // routes           =============================================================================================================================
 
@@ -36,7 +83,7 @@
     });
 
     // crea un elemento nuevo en la lista
-    httpApp.post('/api/lista', function(req, res) {
+    httpApp.post('/api/lista', function(req, res, next) {
         var alreadyExists = false;
 
         Lista.elementos.forEach(function(value, index, ar) {
@@ -45,16 +92,21 @@
             }
         });
 
-        if (!alreadyExists) {
+        if (alreadyExists) {
+            res.status(500).json(errorList(1000));
+        } else if (req.body.id == null || req.body.id == "" || typeof(req.body.id) == 'undefined') {
+            res.status(500).json(errorList(1001));
+        } else if (isNaN(req.body.id)) {
+            res.status(500).json(errorList(1002));
+        } else if (req.body.text == null || req.body.text == "" || typeof(req.body.text) == 'undefined') {
+            res.status(500).json(errorList(1003));
+        } else {
             Lista.elementos[Lista.elementos.length] = {
                 id: req.body.id,
+                owner: req.body.owner,
                 text: req.body.text
             };
             res.json(Lista);
-        } else {
-            res.send({
-                "Error": "El elemento ya existe"
-            });
         }
     });
 

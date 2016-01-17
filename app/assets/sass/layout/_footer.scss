@@ -1,5 +1,9 @@
+@import '../libs/vars';
+@import '../libs/functions';
+@import '../libs/mixins';
+
 ///
-/// Hyperspace by HTML5 UP
+/// Eventually by HTML5 UP
 /// html5up.net | @n33co
 /// Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 ///
@@ -7,32 +11,68 @@
 /* Footer */
 
 	#footer {
-		#sidebar + #wrapper + & {
-			margin-left: _size(sidebar-width);
+		@include vendor('transition', 'opacity 0.5s ease-in-out');
+		bottom: 4em;
+		color: _palette(fg-light);
+		left: 4em;
+		opacity: 0.5;
+		position: absolute;
 
-			@include breakpoint(large) {
-				margin-left: 0;
-			}
+		.icons {
+			margin: 0 0 (_size(element-margin) * 0.25) 0;
 		}
 
-		> .inner {
-			a {
-				border-bottom-color: _palette(border);
+		.copyright {
+			font-size: 0.8em;
+			list-style: none;
+			padding: 0;
 
-				&:hover {
-					border-bottom-color: transparent;
+			li {
+				border-left: solid 1px _palette(border2);
+				display: inline-block;
+				line-height: 1em;
+				margin: 0 0 0 0.75em;
+				padding: 0 0 0 0.75em;
+
+				&:first-child {
+					border-left: 0;
+					margin-left: 0;
+					padding-left: 0;
 				}
 			}
 
-			.menu {
-				font-size: 0.8em;
-				color: _palette(border);
+			a {
+				color: inherit;
 			}
 		}
 
-		#header + #wrapper + & {
-			> .inner {
-				margin: 0 auto;
-			}
+		&:hover {
+			opacity: 1;
+		}
+
+		> :last-child {
+			margin-bottom: 0;
+		}
+
+		@include breakpoint(xlarge) {
+			bottom: 3.5em;
+			left: 3.5em;
+		}
+
+		@include breakpoint(small) {
+			bottom: 2em;
+			left: 2em;
+		}
+
+		@include breakpoint(xxsmall) {
+			bottom: 1.25em;
+			left: 1.25em;
+		}
+
+		@include breakpoint(short) {
+			bottom: auto;
+			left: auto;
+			margin: (_size(element-margin) * 0.5) 0 0 0;
+			position: relative;
 		}
 	}
