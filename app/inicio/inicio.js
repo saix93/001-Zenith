@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('myApp.inicio', ['ngRoute'])
+angular.module('zenith.inicio', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/inicio', {
@@ -9,24 +9,25 @@ angular.module('myApp.inicio', ['ngRoute'])
     });
 }])
 
-.controller('InicioCtrl', ['$scope', '$location', '$http', 'CommonFunctions', 'Data', function($scope, $location, $http, CommonFunctions, Data) {
-    // Inicializacion del controlador
+.controller('InicioCtrl', ['$scope', '$location', '$http', 'CommonFunctions', 'Data',
+    function($scope, $location, $http, CommonFunctions, Data) {
+        // Inicializacion del controlador
 
-        $http.get('/api/lista')
-            .success(function(data){
-                $scope.elementos = data.elementos;
-            })
-            .error(function(data){
+            $http.get('/api/lista')
+                .success(function(data){
+                    $scope.elementos = data.elementos;
+                })
+                .error(function(data){
 
-            });
+                });
 
-    // Funciones llamadas desde plantilla
+        // Funciones llamadas desde plantilla
 
-        $scope.login = function() {
-            if ($scope.username != "Arich") {
-                $location.url('salas');
-            } else {
-                $scope.errorModel.nameError = true;
-            }
-        };
-}]);
+            $scope.login = function() {
+                if ($scope.username != "Arich") {
+                    $location.url('salas');
+                } else {
+                    $scope.errorModel.nameError = true;
+                }
+            };
+    }]);

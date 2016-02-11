@@ -1,15 +1,17 @@
 'use strict';
 
 // Declare app level module which depends on views, and components
-angular.module('myApp', [
+angular.module('zenith', [
     'ngRoute',
-    'myApp.inicio',
-    'myApp.salas',
-    'myApp.version'
+    'zenith.inicio',
+    'zenith.salas',
+    'zenith.version'
 ]).
 config(['$routeProvider', function($routeProvider) {
     $routeProvider.otherwise({redirectTo: '/inicio'});
 }])
+
+// Funciones comunes para mas de un controller
 .factory("CommonFunctions", [function() {
     var commonFunctions = {};
 
@@ -24,16 +26,14 @@ config(['$routeProvider', function($routeProvider) {
     return commonFunctions;
 }])
 .factory("Data", [function() {
-    var data = {
-        url: ''
-    };
+    var data = {};
 
     return {
-        getUrl: function() {
-            return data.url;
+        getData: function() {
+            return data;
         },
-        setUrl: function(url) {
-            data.url = url;
+        setData: function(newData) {
+            data = newData;
         }
     };
 }]);
