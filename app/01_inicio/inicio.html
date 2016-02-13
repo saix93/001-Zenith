@@ -7,7 +7,7 @@
     </header>
 
 <!-- Signup Form -->
-    <form id="signup-form" method="get" action="/salas">
-        <input type="text" name="text" id="text" placeholder="Nombre de usuario" />
-        <button>Continuar</button>
-    </form>
+    <div id="signup-form">
+        <input type="text" ng-model="data.username" placeholder="Nombre de usuario"/>
+        <button ng-click="goTo('salas')">Continuar</button>
+    </div>

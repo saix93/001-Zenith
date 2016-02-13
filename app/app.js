@@ -15,12 +15,12 @@ config(['$routeProvider', function($routeProvider) {
 .factory("CommonFunctions", [function() {
     var commonFunctions = {};
 
-    commonFunctions.init = function(scope){
-
+	commonFunctions.saveData = function(data){
+		localStorage.setItem('zenithData', JSON.stringify(data));
     };
 
-    commonFunctions.goTo = function(){
-
+	commonFunctions.loadData = function(){
+		return JSON.parse(localStorage.getItem('zenithData'));
     };
 
     return commonFunctions;

@@ -1,0 +1,24 @@
+<section id="salas">
+	<p>Bienvenido, {{ data.username }}.</p>
+	<p>¡Puedes unirte a una sala ya creada...</p>
+    <table id="roomTable">
+        <tr>
+            <th class="cellBorder tableTitle">Número de sala</th>
+            <th class="cellBorder tableTitle">Nombre de sala</th>
+            <th class="cellBorder tableTitle passCell">¿Contraseña?</th>
+        </tr>
+        <tr ng-repeat="(key, value) in elementos">
+            <td class="cellBorder tableData">{{ value.id }}</td>
+            <td class="cellBorder tableData"><a href="#">{{ value.text }}</a></td>
+			<td class="cellBorder tableData passCell"></td>
+        </tr>
+    </table>
+	<p>...o crear tu propia sala!</p>
+	<table>
+		<tr>
+			<td><input id="id" placeholder="ID" ng-model="newId"/></td>
+			<td><input id="texto" placeholder="TEXTO" ng-model="newText"/></td>
+			<td><button ng-click="addRoom(newId, newText)">Añadir</button></td>
+		</tr>
+	</table>
+</section>

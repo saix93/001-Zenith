@@ -1,1 +1,24 @@
 /* app css stylesheet */
+#roomTable {
+	width: 100%;
+	border-radius: 2em;
+	border: 2px solid white;
+}
+
+#roomTable passCell {
+	width: 50px;
+}
+
+#roomTable th {
+	background-color: rgb(28, 180, 149);
+	color: black;
+	border: 1px solid black;
+	padding: 10px;
+}
+
+#roomTable td {
+	background-color: white;
+	color: black;
+	border: 1px solid black;
+	padding: 10px;
+}
