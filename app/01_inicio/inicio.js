@@ -4,7 +4,7 @@ angular.module('zenith.inicio', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/inicio', {
-        templateUrl: 'inicio/inicio.html',
+        templateUrl: '01_inicio/inicio.html',
         controller: 'InicioCtrl'
     });
 }])
@@ -16,11 +16,7 @@ angular.module('zenith.inicio', ['ngRoute'])
 			$scope.data = lsData;
 		}
 
-        $http.get('/api/lista')
-            .success(function(data){
-                $scope.elementos = data.elementos;
-            });
-
+		// Funcion para cambiar de vista
 		$scope.goTo = function(url) {
 			var newData = {
 				data: {

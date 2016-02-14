@@ -17,23 +17,29 @@
     httpApp.use(methodOverride());
 
 // define model     =============================================================================================================================
-    var Lista = {
-        "elementos": [{
-            "id": 1,
-            "owner": "Basch",
-            "text": "Sala de Basch"
+    var listOfRooms = {
+        "rooms": [{
+            "roomID": 1,
+            "roomName": "Sala de pruebas",
+			"roomOwner": "Basch",
+            "password": "",
+			"hasPassword": "No"
         },{
-            "id": 2,
-            "owner": "Link",
-            "text": "Sala de Link"
+            "roomID": 2,
+            "roomName": "Salón de juegos",
+			"roomOwner": "Link",
+            "password": "asddsa",
+			"hasPassword": "Si"
         },{
-            "id": 3,
-            "owner": "Saix",
-            "text": "DSPRoom"
+            "roomID": 3,
+            "roomName": "Sala DSP",
+			"roomOwner": "Saix",
+            "password": "",
+			"hasPassword": "No"
         }]
     };
 
-    //Lista de errores con código y texto
+    // Lista de errores con código y texto
     function errorList(err) {
         var data = {};
         data.errorCode = err;
@@ -42,8 +48,8 @@
 
         switch (err){
             case 1000:
-                data.errorText = "La ID ya existe";
-                data.errorInput = "id";
+                data.errorText = "El nombre de la sala ya existe";
+                data.errorInput = "roomName";
                 break;
             case 1001:
                 data.errorText = "La ID no puede ir vacía";
@@ -67,7 +73,7 @@
                 data.errorText = "";
                 break;
 
-            default: 
+            default:
                 data.errorText = "Error desconocido";
         };
 
@@ -78,16 +84,16 @@
 
     // api ---------------------------------------------------------------------
     // get de la lista de elementos
-    httpApp.get('/api/lista', function(req, res) {
-        res.json(Lista);
+    httpApp.get('/api/list-of-rooms', function(req, res) {
+        res.json(listOfRooms);
     });
 
     // crea un elemento nuevo en la lista
-    httpApp.post('/api/lista', function(req, res, next) {
+    httpApp.post('/api/list-of-rooms', function(req, res, next) {
         var alreadyExists = false;
 
-        Lista.elementos.forEach(function(value, index, ar) {
-            if (value.id == req.body.id) {
+        listOfRooms.rooms.forEach(function(value, index, ar) {
+            if (value.text == req.body.text) {
                 alreadyExists = true;
             }
         });
@@ -101,13 +107,19 @@
         } else if (req.body.text == null || req.body.text == "" || typeof(req.body.text) == 'undefined') {
             res.status(500).json(errorList(1003));
         } else {
-            Lista.elementos[Lista.elementos.length] = {
+            listOfRooms.rooms[listOfRooms.rooms.length] = {
                 id: req.body.id,
                 owner: req.body.owner,
                 text: req.body.text
             };
-            res.json(Lista);
+            res.json(listOfRooms);
         }
+    });
+
+	// recupera una sala concreta mediante su ID
+    httpApp.post('/api/get-room', function(req, res) {
+		req.body.roomID;
+        res.json(listOfRooms);
     });
 
     // TODO: Borrar un elemento y ordenar el array cada vez que se borra o se añade un elemento

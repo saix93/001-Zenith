@@ -4,14 +4,13 @@ angular.module('zenith.salas', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
     $routeProvider.when('/salas', {
-        templateUrl: 'salas/salas.html',
+        templateUrl: '02_salas/salas.html',
         controller: 'SalasCtrl'
     });
 }])
 
 .controller('SalasCtrl', ['$scope', '$location', '$http', 'CommonFunctions', 'Data',
     function($scope, $location, $http, CommonFunctions, Data) {
-        // Inicializacion del controlador
 		var lsData = CommonFunctions.loadData();
 		if (lsData != null) {
 			$scope.data = lsData;
@@ -19,20 +18,20 @@ angular.module('zenith.salas', ['ngRoute'])
 
         $scope.errorModel = {};
 
-        $http.get('/api/lista')
+        $http.get('/api/list-of-rooms')
             .success(function(data){
-                $scope.elementos = data.elementos;
+                $scope.rooms = data.rooms;
             });
 
-        // Funciones llamadas desde plantilla
+		// Funcion para agregar una sala
         $scope.addRoom = function (newId, newText) {
             var newData = {};
             newData.id = newId;
             newData.text = newText;
             $scope.errorModel = {};
 
-            $http.post('/api/lista', newData).success(function(data){
-                $scope.elementos = data.elementos;
+            $http.post('/api/list-of-rooms', newData).success(function(data){
+                $scope.rooms = data.rooms;
             }).error(function(data){
                 $scope.errorModel.roomError = data;
             });
@@ -42,7 +41,14 @@ angular.module('zenith.salas', ['ngRoute'])
             document.getElementById(input).focus();
         };
 
+		// Funcion para cambiar de vista
 		$scope.goTo = function(url) {
+			var newData = {
+				data: {
+					username: $scope.data.username
+				}
+			};
+			angular.extend($scope, newData);
 			CommonFunctions.saveData($scope.data);
 			$location.url(url);
 		}
