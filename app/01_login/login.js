@@ -1,15 +1,15 @@
 'use strict';
 
-angular.module('zenith.inicio', ['ngRoute'])
+angular.module('zenith.login', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
-    $routeProvider.when('/inicio', {
-        templateUrl: '01_inicio/inicio.html',
-        controller: 'InicioCtrl'
+    $routeProvider.when('/login', {
+        templateUrl: '01_login/login.html',
+        controller: 'LoginCtrl'
     });
 }])
 
-.controller('InicioCtrl', ['$scope', '$location', '$http', 'CommonFunctions', 'Data',
+.controller('LoginCtrl', ['$scope', '$location', '$http', 'CommonFunctions', 'Data',
     function($scope, $location, $http, CommonFunctions, Data) {
 		var lsData = CommonFunctions.loadData();
 		if (lsData != null) {

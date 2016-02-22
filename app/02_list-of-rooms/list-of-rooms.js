@@ -1,15 +1,15 @@
 'use strict';
 
-angular.module('zenith.salas', ['ngRoute'])
+angular.module('zenith.list-of-rooms', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
-    $routeProvider.when('/salas', {
-        templateUrl: '02_salas/salas.html',
-        controller: 'SalasCtrl'
+    $routeProvider.when('/list-of-rooms', {
+        templateUrl: '02_list-of-rooms/list-of-rooms.html',
+        controller: 'ListOFRoomsCtrl'
     });
 }])
 
-.controller('SalasCtrl', ['$scope', '$location', '$http', 'CommonFunctions', 'Data',
+.controller('ListOFRoomsCtrl', ['$scope', '$location', '$http', 'CommonFunctions', 'Data',
     function($scope, $location, $http, CommonFunctions, Data) {
 		var lsData = CommonFunctions.loadData();
 		if (lsData != null) {

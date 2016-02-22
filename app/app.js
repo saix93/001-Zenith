@@ -3,12 +3,12 @@
 // Declare app level module which depends on views, and components
 angular.module('zenith', [
     'ngRoute',
-    'zenith.inicio',
-    'zenith.salas',
+    'zenith.login',
+    'zenith.list-of-rooms',
     'zenith.version'
 ]).
 config(['$routeProvider', function($routeProvider) {
-    $routeProvider.otherwise({redirectTo: '/inicio'});
+    $routeProvider.otherwise({redirectTo: '/login'});
 }])
 
 // Funciones comunes para mas de un controller
