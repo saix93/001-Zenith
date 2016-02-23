@@ -1,12 +1,11 @@
 // configuration    =============================================================================================================================
     // Load required modules
-    var http    = require("http");              // http server core module
-    var express = require("express");           // web framework external module
-    var httpApp = express();
-    var bodyParser = require('body-parser');    // pull information from HTML POST (express4)
-    var methodOverride = require('method-override'); // simulate DELETE and PUT (express4)
-    //    var io      = require("socket.io");         // web socket external module
-    //    var easyrtc = require("easyrtc");           // EasyRTC external module
+    var http    		= require('http');				// http server core module
+    var express 		= require('express');			// web framework external module
+    var httpApp 		= express();
+    var bodyParser 		= require('body-parser'); 		// pull information from HTML POST (express4)
+    var methodOverride 	= require('method-override'); 	// simulate DELETE and PUT (express4)
+    var io 				= require('socket.io');			// web socket external module
 
     // Setup and configure Express http server. Expect a subfolder called "static" to be the web root.
     httpApp.use(express.static(__dirname + "/app/"));
@@ -143,11 +142,46 @@
         });
     });
 */
-// Start Socket.io so it attaches itself to Express server
-//    var socketServer = io.listen(webServer, {"log level":1});
-
-// Start EasyRTC server
-//    var rtc = easyrtc.listen(httpApp, socketServer);
 
 // Start Express http server on port 8080
 var webServer = http.createServer(httpApp).listen(8080);
+io = io.listen(webServer);
+
+io.sockets.on('connection', function (socket){
+
+	// convenience function to log server messages on the client
+	function log(){
+		var array = [">>> Message from server: "];
+		for (var i = 0; i < arguments.length; i++) {
+			array.push(arguments[i]);
+		}
+		socket.emit('log', array);
+	}
+
+	socket.on('message', function (message) {
+		log('Got message:', message);
+		// for a real app, would be room only (not broadcast)
+		socket.broadcast.emit('message', message);
+	});
+
+	socket.on('create or join', function (room) {
+		var numClients = io.sockets.clients(room).length;
+
+		log('Room ' + room + ' has ' + numClients + ' client(s)');
+		log('Request to create or join room ' + room);
+
+		if (numClients === 0){
+			socket.join(room);
+			socket.emit('created', room);
+		} else if (numClients === 1) {
+			io.sockets.in(room).emit('join', room);
+			socket.join(room);
+			socket.emit('joined', room);
+		} else { // max two clients
+			socket.emit('full', room);
+		}
+		socket.emit('emit(): client ' + socket.id + ' joined room ' + room);
+		socket.broadcast.emit('broadcast(): client ' + socket.id + ' joined room ' + room);
+	});
+
+});
