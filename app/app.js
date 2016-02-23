@@ -5,6 +5,7 @@ angular.module('zenith', [
     'ngRoute',
     'zenith.login',
     'zenith.list-of-rooms',
+    'zenith.room',
     'zenith.version'
 ]).
 config(['$routeProvider', function($routeProvider) {
