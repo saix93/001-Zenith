@@ -1,11 +1,22 @@
 // configuration    =============================================================================================================================
     // Load required modules
-    var http    		= require('http');				// http server core module
+    var https    		= require('https');				// http server core module
+	var fs				= require('fs');
     var express 		= require('express');			// web framework external module
     var httpApp 		= express();
     var bodyParser 		= require('body-parser'); 		// pull information from HTML POST (express4)
     var methodOverride 	= require('method-override'); 	// simulate DELETE and PUT (express4)
     //var io 				= require('socket.io');			// web socket external module
+
+	var options = {
+		key: fs.readFileSync('server.key'),
+		cert: fs.readFileSync('server.crt'),
+		requestCert: false,
+		rejectUnauthorized: false
+	};
+
+	// Start Express http server on port 8080
+	var webServer = https.createServer(options, httpApp).listen(8080);
 
     // Setup and configure Express http server. Expect a subfolder called "static" to be the web root.
     httpApp.use(express.static(__dirname + "/app/"));
@@ -143,18 +154,41 @@
     });
 */
 
-// Start Express http server on port 8080
-var webServer = http.createServer(httpApp).listen(8080);
 //io = io.listen(webServer);
 io = require('socket.io')(webServer);
 
+var allClients = [];
+
+// Un usuario se conecta
 io.on('connection', function (socket){
     console.log('a user connected');
+	allClients.push(socket);
+
+	// Un usuario se desconecta
     socket.on('disconnect', function(){
-        console.log('user disconnected');
+		var i = allClients.indexOf(socket);
+		allClients.splice(i, 1);
+		console.log('User ' + i + ' disconnected.');
     });
 
+	// Deja un mensaje en el log del servidor
     socket.on('chat message', function(msg){
         console.log('message: ' + msg);
+		io.emit('chat message', msg);
     });
+
+	// El usuario emite su video
+	socket.on('video', function(localMediaStream){
+		io.emit('video', localMediaStream);
+	});
+
+	// Envio de offer
+	socket.on('video offer', function(offer){
+		io.emit('video offer', offer);
+	})
+
+	// Envio de answer
+	socket.on('video answer', function(answer){
+		io.emit('video answer', answer);
+	});
 });

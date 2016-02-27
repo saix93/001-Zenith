@@ -22,3 +22,12 @@
 	border: 1px solid black;
 	padding: 10px;
 }
+
+.videoChat {
+	float: left;
+}
+
+.videoChat video {
+	width: 200px;
+	height: 200px;
+}
