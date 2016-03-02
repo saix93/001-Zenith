@@ -101,7 +101,7 @@ angular.module('zenith.room', ['ngRoute'])
 
 		if (numberOfPeople != 0) {
 			socket.on('video offer', function(offer){
-				if (offer.sdp != $scope.data.myOffer.sdp) {
+				//if (offer.sdp != $scope.data.myOffer.sdp) {
 					/*
 					pc.setRemoteDescription(new RTCSessionDescription(offer), function() {
 						pc.createAnswer(function(answer) {
@@ -126,8 +126,8 @@ angular.module('zenith.room', ['ngRoute'])
 								}, error);
 							}, error);
 						}, error);
-					});
-				}
+					}, error);
+				//}
 			});
 		}
 
