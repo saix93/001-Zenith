@@ -77,30 +77,32 @@ angular.module('zenith.room', ['ngRoute'])
 
 //----------------------------------------------------------------------------//
 
-		// Get a list of friends from a server
-		// User selects a friend to start a peer connection with
-		//
-		getUserMedia(userMediaConf, function(stream) {
-			// Adding a local stream won't trigger the onaddstream callback,
-			// so call it manually.
-			pc.onaddstream({stream: stream});
-			pc.addStream(stream);
+		var numberOfPeople = 0;
 
-			pc.createOffer(function(offer) {
-				pc.setLocalDescription(new RTCSessionDescription(offer), function() {
-					// send the offer to a server to be forwarded to the friend you're calling.
-					$scope.data.myOffer = offer;
-					socket.emit('video offer', offer);
+		if (numberOfPeople == 0) {
+			// Get a list of friends from a server
+			// User selects a friend to start a peer connection with
+			//
+			getUserMedia(userMediaConf, function(stream) {
+				// Adding a local stream won't trigger the onaddstream callback,
+				// so call it manually.
+				pc.onaddstream({stream: stream});
+				pc.addStream(stream);
+
+				pc.createOffer(function(offer) {
+					pc.setLocalDescription(new RTCSessionDescription(offer), function() {
+						// send the offer to a server to be forwarded to the friend you're calling.
+						$scope.data.myOffer = offer;
+						socket.emit('video offer', offer);
+					}, error);
 				}, error);
 			}, error);
-		}, error);
+		}
 
-		socket.on('video offer', function(offer){
-			if (offer.sdp != $scope.data.myOffer.sdp) {
-				getUserMedia(userMediaConf, function(stream) {
-					pc.onaddstream({stream: stream});
-					pc.addStream(stream);
-
+		if (numberOfPeople != 0) {
+			socket.on('video offer', function(offer){
+				if (offer.sdp != $scope.data.myOffer.sdp) {
+					/*
 					pc.setRemoteDescription(new RTCSessionDescription(offer), function() {
 						pc.createAnswer(function(answer) {
 							pc.setLocalDescription(new RTCSessionDescription(answer), function() {
@@ -110,16 +112,30 @@ angular.module('zenith.room', ['ngRoute'])
 							}, error);
 						}, error);
 					}, error);
-				}, error);
-			}
-		});
+					*/
+					getUserMedia({video: true}, function(stream) {
+						pc.onaddstream({stream: stream});
+						pc.addStream(stream);
+
+						pc.setRemoteDescription(new RTCSessionDescription(offer), function() {
+							pc.createAnswer(function(answer) {
+								pc.setLocalDescription(new RTCSessionDescription(answer), function() {
+									// send the answer to a server to be forwarded back to the caller (you)
+									$scope.data.myAnswer = answer;
+									socket.emit('video answer', answer);
+								}, error);
+							}, error);
+						}, error);
+					});
+				}
+			});
+		}
 
 		socket.on('video answer', function(answer){
 			if (answer != $scope.data.myAnswer) {
-				pc.setRemoteDescription(new RTCSessionDescription(offer), function() { }, error);
+				pc.setRemoteDescription(new RTCSessionDescription(answer), function() { }, error);
 			}
 		});
-
 //----------------------------------------------------------------------------//
 
 		socket.on('chat message', function(msg){
