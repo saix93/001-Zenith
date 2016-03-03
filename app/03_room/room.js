@@ -76,10 +76,10 @@ angular.module('zenith.room', ['ngRoute'])
 		}
 
 //----------------------------------------------------------------------------//
-
-		var numberOfPeople = 0;
-
-		if (numberOfPeople == 0) {
+		
+		$scope.data.myOffer = {};
+		
+		$scope.startCall = function() {
 			// Get a list of friends from a server
 			// User selects a friend to start a peer connection with
 			//
@@ -99,10 +99,23 @@ angular.module('zenith.room', ['ngRoute'])
 			}, error);
 		}
 
-		if (numberOfPeople != 0) {
-			socket.on('video offer', function(offer){
-				//if (offer.sdp != $scope.data.myOffer.sdp) {
-					/*
+		socket.on('video offer', function(offer){
+			if (offer.sdp != $scope.data.myOffer.sdp) {
+				/*
+				pc.setRemoteDescription(new RTCSessionDescription(offer), function() {
+					pc.createAnswer(function(answer) {
+						pc.setLocalDescription(new RTCSessionDescription(answer), function() {
+							// send the answer to a server to be forwarded back to the caller (you)
+							$scope.data.myAnswer = answer;
+							socket.emit('video answer', answer);
+						}, error);
+					}, error);
+				}, error);
+				*/
+				getUserMedia({video: true}, function(stream) {
+					pc.onaddstream({stream: stream});
+					pc.addStream(stream);
+
 					pc.setRemoteDescription(new RTCSessionDescription(offer), function() {
 						pc.createAnswer(function(answer) {
 							pc.setLocalDescription(new RTCSessionDescription(answer), function() {
@@ -112,24 +125,9 @@ angular.module('zenith.room', ['ngRoute'])
 							}, error);
 						}, error);
 					}, error);
-					*/
-					getUserMedia({video: true}, function(stream) {
-						pc.onaddstream({stream: stream});
-						pc.addStream(stream);
-
-						pc.setRemoteDescription(new RTCSessionDescription(offer), function() {
-							pc.createAnswer(function(answer) {
-								pc.setLocalDescription(new RTCSessionDescription(answer), function() {
-									// send the answer to a server to be forwarded back to the caller (you)
-									$scope.data.myAnswer = answer;
-									socket.emit('video answer', answer);
-								}, error);
-							}, error);
-						}, error);
-					}, error);
-				//}
-			});
-		}
+				}, error);
+			}
+		});
 
 		socket.on('video answer', function(answer){
 			if (answer != $scope.data.myAnswer) {
