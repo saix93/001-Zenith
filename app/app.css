@@ -23,11 +23,7 @@
 	padding: 10px;
 }
 
-.videoChat {
-	float: left;
-}
-
-.videoChat video {
-	width: 200px;
-	height: 200px;
+#videoChat video {
+	max-width: 40%;
+	max-height: 40%;
 }

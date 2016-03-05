@@ -18,22 +18,15 @@ angular.module('zenith.room', ['ngRoute'])
 
 		var socket = io();
 
-		/*
-		getUserMedia(conf, function(localMediaStream){
-			var video = document.getElementById('localVideo');
-			video.src = window.URL.createObjectURL(localMediaStream);
-			socket.emit('video', video.src);
-		}, function(err){
-			console.log(err);
+		socket.on('chat message', function(msg){
+			console.log(msg);
 		});
 
-		socket.on('video', function(localMediaStream){
-			var video = document.getElementById('remoteVideo');
-			video.src = localMediaStream;
-		});
-		*/
+		socket.emit('chat message', $scope.data.username);
 
-//----------------------------------------------------------------------------//
+		$(window).on('beforeunload', function(){
+			socket.close();
+		});
 
 		var servers = {
 			iceServers: [
@@ -59,6 +52,7 @@ angular.module('zenith.room', ['ngRoute'])
 			document.getElementById("videoChat").appendChild(video);
 			video.src = window.URL.createObjectURL(obj.stream);
 			video.autoplay = true;
+			console.log(obj.stream);
 		}
 
 		// Helper functions
@@ -73,77 +67,67 @@ angular.module('zenith.room', ['ngRoute'])
 
 		function error(err) {
 			endCall();
+			console.log(err);
 		}
 
-//----------------------------------------------------------------------------//
-		
 		$scope.data.myOffer = {};
-		
-		$scope.startCall = function() {
-			// Get a list of friends from a server
-			// User selects a friend to start a peer connection with
-			//
-			getUserMedia(userMediaConf, function(stream) {
-				// Adding a local stream won't trigger the onaddstream callback,
-				// so call it manually.
-				pc.onaddstream({stream: stream});
-				pc.addStream(stream);
+		$scope.data.myAnswer = {};
 
-				pc.createOffer(function(offer) {
-					pc.setLocalDescription(new RTCSessionDescription(offer), function() {
-						// send the offer to a server to be forwarded to the friend you're calling.
-						$scope.data.myOffer = offer;
-						socket.emit('video offer', offer);
-					}, error);
-				}, error);
-			}, error);
-		}
+		getUserMedia(userMediaConf, function(stream) {
+			pc.onaddstream({stream: stream});
+			pc.addStream(stream);
+		}, error);
 
-		socket.on('video offer', function(offer){
+		socket.on('offer', function(offer) {
 			if (offer.sdp != $scope.data.myOffer.sdp) {
-				/*
 				pc.setRemoteDescription(new RTCSessionDescription(offer), function() {
 					pc.createAnswer(function(answer) {
-						pc.setLocalDescription(new RTCSessionDescription(answer), function() {
+						pc.setLocalDescription(answer, function() {
 							// send the answer to a server to be forwarded back to the caller (you)
 							$scope.data.myAnswer = answer;
-							socket.emit('video answer', answer);
-						}, error);
-					}, error);
-				}, error);
-				*/
-				getUserMedia({video: true}, function(stream) {
-					pc.onaddstream({stream: stream});
-					pc.addStream(stream);
-
-					pc.setRemoteDescription(new RTCSessionDescription(offer), function() {
-						pc.createAnswer(function(answer) {
-							pc.setLocalDescription(new RTCSessionDescription(answer), function() {
-								// send the answer to a server to be forwarded back to the caller (you)
-								$scope.data.myAnswer = answer;
-								socket.emit('video answer', answer);
-							}, error);
+							socket.emit('answer', answer);
 						}, error);
 					}, error);
 				}, error);
 			}
 		});
 
-		socket.on('video answer', function(answer){
-			if (answer != $scope.data.myAnswer) {
-				pc.setRemoteDescription(new RTCSessionDescription(answer), function() { }, error);
+		socket.on('answer', function(answer){
+			if (answer.sdp != $scope.data.myAnswer.sdp) {
+				pc.setRemoteDescription(new RTCSessionDescription(answer), function() {
+					console.log("OKI DOKI");
+				}, error);
 			}
 		});
-//----------------------------------------------------------------------------//
 
-		socket.on('chat message', function(msg){
-			console.log(msg);
+		$scope.call = function() {
+			pc.createOffer(function(offer) {
+				pc.setLocalDescription(offer, function() {
+					// send the offer to a server to be forwarded to the friend you're calling.
+					$scope.data.myOffer = offer;
+					socket.emit('offer', offer);
+				}, error);
+			}, error);
+		};
+
+		pc.onicecandidate = function (event) {
+			console.log("New Candidate");
+			console.log(event.candidate);
+
+			socket.emit('candidate',event.candidate);
+		};
+
+		socket.on('candidate', function (candidate) {
+			console.log("New Remote Candidate");
+			console.log(candidate);
+
+			try {
+				pc.addIceCandidate(new RTCIceCandidate({
+					sdpMLineIndex: candidate.sdpMLineIndex,
+					candidate: candidate.candidate
+				}));
+			} catch(err) {
+				console.log(err);
+			}
 		});
-
-		socket.emit('chat message', $scope.data.username);
-
-		$(window).on('beforeunload', function(){
-			socket.close();
-		});
-
 	}]);

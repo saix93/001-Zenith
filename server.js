@@ -183,12 +183,17 @@ io.on('connection', function (socket){
 	});
 
 	// Envio de offer
-	socket.on('video offer', function(offer){
-		io.emit('video offer', offer);
+	socket.on('offer', function(offer){
+		io.emit('offer', offer);
 	})
 
 	// Envio de answer
-	socket.on('video answer', function(answer){
-		io.emit('video answer', answer);
+	socket.on('answer', function(answer){
+		io.emit('answer', answer);
+	});
+
+	// Envio de answer
+	socket.on('candidate', function(candidate){
+		io.emit('candidate', candidate);
 	});
 });
